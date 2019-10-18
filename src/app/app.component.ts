@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -11,17 +12,22 @@ export class AppComponent {
   preview;
   window = window;
   svg;
-  imageFormats =[
+  images = [];
+  imageFormats = [
     {width: '755', height: '450'},
     {width: '365', height: '450'},
     {width: '755', height: '212'},
     {width: '380', height: '380'}
   ];
 
+  constructor(private sanitizer: DomSanitizer) {
+
+  }
+
   onFileSelect(e) {
     this.error = '';
     const reader = new FileReader();
-    if(e.target.files && e.target.files.length) {
+    if (e.target.files && e.target.files.length) {
       const file = e.target.files[0];
 
       const img = new Image();
@@ -44,15 +50,11 @@ export class AppComponent {
   }
 
   onSubmit() {
-    console.log(this.selectedFile);
-    console.log(this.error);
-
     if (!this.error) {
-
       this.imageFormats.forEach(format => {
         this.createSVG(format);
+        this.getImageFromSVG();
       });
-      this.getImageFromSVG();
     }
   }
 
@@ -68,21 +70,21 @@ export class AppComponent {
     this.svg.appendChild(element);
 
     document.body.appendChild(this.svg);
-    console.log(this.svg);
-
   }
 
   getImageFromSVG() {
     const blob = new Blob([this.svg], {type: 'image/svg+xml'});
-    const URL = this.window.URL.createObjectURL(blob);
-    const image = document.createElement('img');
 
-    image.addEventListener('load', () => this.window.URL.revokeObjectURL(URL), {once: true});
+    // const url = this.window.URL.(blob);
+    // console.log(url);
 
-    image.src = URL;
-    console.log(image);
-
-    // document.appendChild(image);
-
+    // Define the FileReader which is able to read the contents of Blob
+    const reader = new FileReader();
+    const base64 = reader.readAsBinaryString(blob);
+    console.log(base64);
+    reader.onloadend = () => {
+      // const r = btoa(reader.result);
+      console.log(reader.result);
+    };
   }
 }

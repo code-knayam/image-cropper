@@ -5,4 +5,8 @@
     <img *ngIf="selectedFile" class="preview" [src]="selectedFile" alt="">
     <button class="submit-btn" type="button" (click)="onSubmit()">Submit</button>
   </div>
+
+  <div *ngFor="let image of images">
+    <img [src]="image" alt="">
+  </div>
 </div>
