@@ -1,0 +1,12 @@
+<div *ngIf="!showLoader" class="jumbotron" #tiffCanvasContainer>
+  <div class="row">
+    <input type="file" accept="image/*" name="file" (change)="onFileSelect($event)">
+    <span class="error-msg" *ngIf="error">File should be in 1024 * 1024 format only</span>
+    <img *ngIf="selectedFile" class="preview" [src]="selectedFile" alt="">
+    <button class="submit-btn" type="button" (click)="onSubmit()">Submit</button>
+  </div>
+</div>
+
+<div *ngIf="showLoader" class="loader">
+  loader
+</div>
